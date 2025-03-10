@@ -50,7 +50,11 @@
 				<td
 					class="text-uppercase text-center font-weight-bold"
 					style="width: 1rem;"
-					:style="{ 'color' : team.color }"
+                    :style="{
+                        color: team.color,
+                        '-webkit-text-fill-color': team.color,
+                        '-webkit-text-stroke': '0.5px black'
+                    }"
 					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
 				>
 					<v-col align="center">

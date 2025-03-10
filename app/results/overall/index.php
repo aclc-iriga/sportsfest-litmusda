@@ -44,7 +44,7 @@
                         <p class="m-0"><i>as of</i>&nbsp;&nbsp;<?= date('M. d, Y h:i A', time()) ?></p>
                     </th>
                     <?php foreach($results['teams'] as $team_key => $team) { ?>
-                        <th colspan="2" style="color: <?= $team['color'] ?>" class="text-center bl bt br">
+                        <th colspan="2" style="color: <?= $team['color'] ?>; -webkit-text-fill-color: <?= $team['color'] ?>; -webkit-text-stroke: 0.5px black" class="text-center bl bt br">
                             <h6 class="m-0 text-uppercase"><?= $team['color'] ?></h6>
                             <h4 class="m-0"><?= $team['name'] ?></h4>
                         </th>
