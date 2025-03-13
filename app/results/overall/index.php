@@ -35,6 +35,51 @@
     <title>Overall Results</title>
 <body>
     <div class="container-fluid mt-3">
+        <?php
+
+        // scan events with zero points
+        $events_zero_points = [];
+        foreach(Event::all() as $event) {
+            foreach($event->getAllPoints() as $point) {
+                if($point->getValue() <= 0) {
+                    $events_zero_points[] = $event;
+                    break;
+                }
+            }
+        }
+
+        if(sizeof($events_zero_points) > 0) { ?>
+
+            <div class="card position-relative overflow-hidden mb-4" id="ramona">
+                <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('img/ramona.jpg') center/cover; opacity: 0.3;"></div>
+                <div class="card-header d-flex justify-content-between align-items-center bg-danger text-white ">
+                    <h5 class="mb-0">Events with No Points</h5>
+                    <button type="button" class="btn-close btn-close-white" aria-label="Close" onclick="document.getElementById('ramona').remove();"></button>
+                </div>
+                <div class="card-body position-relative">
+                    <div class="d-flex justify-content-center" style="height: 420px;">
+                        <div class="d-flex flex-column justify-content-center text-danger">
+                            <h6 class="card-text mb-3 fw-bold">
+                                The following events have no points:
+                            </h6>
+
+                            <ol class="d-inline-block overflow-auto" style="max-height: 69%;">
+                                <?php foreach($events_zero_points as $events_zero_point) { ?>
+                                    <li><?= htmlspecialchars($events_zero_point->getTitle()) ?></li>
+                                <?php } ?>
+                            </ol>
+
+                            <h6 class="card-text text-center mt-3">
+                                Please check their point system in the <a href="../../crud/guidelines/event_ranking.php" class="text-danger">Guidelines</a> page.
+                            </h6>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        <?php } ?>
+
         <table class="table table-bordered">
             <!-- table header -->
             <thead>
