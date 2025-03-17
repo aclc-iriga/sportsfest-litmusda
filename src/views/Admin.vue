@@ -150,14 +150,19 @@
 			<tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
 				<td
 					class="text-center font-weight-bold"
-					:class="`${$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-5' : ''}`"
 				>
 					{{ teamIndex + 1 }}
 				</td>
-				<td
+
+                <td
 					class="text-center text-uppercase font-weight-bold"
-					:style="{'color': `${team.color} !important` }"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+                    :style="{
+                        color: team.color,
+                        '-webkit-text-fill-color': team.color,
+                        '-webkit-text-stroke': '0.5px black'
+                    }"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-5' : ''}`"
 				>
 					{{ team.name }}
 				</td>
@@ -168,7 +173,7 @@
                     :class="{
                         'bg-grey-lighten-3' : !team.deductions.inputs[technicalKey].is_locked,
                         'bg-white' : team.deductions.inputs[technicalKey].is_locked && team.title === '',
-                        'bg-yellow-lighten-3': allSubmitted && team.deductions.inputs[technicalKey].is_locked && team.title !== ''
+                        'bg-yellow-lighten-5': allSubmitted && team.deductions.inputs[technicalKey].is_locked && team.title !== ''
                     }"
                 >
                     <span :class="{ blurred: !team.deductions.inputs[technicalKey].is_locked && team.deductions.inputs[technicalKey].value <= 0 }">
@@ -181,7 +186,7 @@
                     :class="{
                         'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
                         'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
-                        'bg-yellow-lighten-3' : allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== ''
+                        'bg-yellow-lighten-5' : allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== ''
                     }"
                 >
                     <div
@@ -200,7 +205,7 @@
                         :class="{
                             'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
                             'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
-                            'bg-yellow-lighten-3' : allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== ''
+                            'bg-yellow-lighten-5' : allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== ''
                         }"
                     >
                         <span :class="{ blurred: !team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.ratings.inputs[`judge_${judge.id}`].final.deducted <= 0 }">
@@ -210,37 +215,81 @@
                 </td>
 				<td
 					class="text-center font-weight-bold text-green-darken-4"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-5' : ''}`"
 				>
 					{{ team.ratings.average.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold text-blue-darken-4"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-5' : ''}`"
 				>
 					{{ team.rank.total.fractional.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold text-grey-darken-1"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-5' : ''}`"
 				>
 					{{ team.rank.initial.fractional.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-5' : ''}`"
 				>
 					{{ team.rank.final.fractional }}
 				</td>
                 <td
                     class="text-center font-weight-bold"
-                    :class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+                    :class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-5' : ''}`"
                 >
                     {{ team.title }}
                 </td>
 			</tr>
 			</tbody>
 			<tfoot>
+            <tr class="tr-winners-summary" :style="{ 'opacity': allSubmitted ? '1' : '0.5' }">
+                <td :colspan="12 + totalSignatories">
+                    <v-row class="justify-center pt-8 pb-5">
+                        <v-col
+                            v-for="(winnerSummary, winnerSummaryIndex) in winnersSummary.reverse()"
+                            cols="12"
+                            :md="Math.ceil(12 / uniqueTitles.length)"
+                        >
+                            <v-card density="compact" elevation="0">
+                                <v-card-title class="text-center">
+                                    <h4 class="pa-0 ma-0">{{ winnerSummary.title }}</h4>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-sheet class="d-flex justify-center align-center text-center" style="column-gap: 30px;">
+                                        <v-sheet
+                                            v-for="(teamKey, teamKeyIndex) in winnerSummary.winners"
+                                            class="d-flex flex-column justify-center align-center py-2"
+                                        >
+                                            <v-img
+                                                :src="`${$store.getters.appURL}/crud/uploads/${teams[teamKey].logo}`"
+                                                :lazy-src="`${$store.getters.appURL}/crud/uploads/${teams[teamKey].logo}`"
+                                                aspect-ratio="1"
+                                                :alt="`${teams[teamKey].name} Logo`"
+                                                :height="$vuetify.display.mdAndDown ? 50 : 80"
+                                                :width="$vuetify.display.mdAndDown ? 50 : 80"
+                                            />
+                                            <span
+                                                class="text-uppercase font-weight-bold d-inline-block pt-2"
+                                                :style="{
+                                                    color: teams[teamKey].color,
+                                                    '-webkit-text-fill-color': teams[teamKey].color,
+                                                    '-webkit-text-stroke': '0.5px black'
+                                                }"
+                                            >
+                                                {{ teams[teamKey].name }}
+                                            </span>
+                                        </v-sheet>
+                                    </v-sheet>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </td>
+            </tr>
 			<tr>
 				<td :colspan="12 + totalSignatories">
 					<v-row class="justify-center">
@@ -387,6 +436,35 @@ export default {
                 }
             }
             return status;
+        },
+        uniqueTitles() {
+            const titles = [];
+            for(const teamKey in this.winners) {
+                const title = this.winners[teamKey];
+                if (title) {
+                    if (!titles.includes(title)) {
+                        titles.push(title)
+                    }
+                }
+            }
+            return titles;
+        },
+        winnersSummary() {
+            const summary = [];
+            for(let i=0; i<this.uniqueTitles.length; i++) {
+                const title = this.uniqueTitles[i];
+                const winners = [];
+                for(const teamKey in this.winners) {
+                    if(title === this.winners[teamKey]) {
+                        winners.push(teamKey);
+                    }
+                }
+                summary.push({
+                    title,
+                    winners
+                });
+            }
+            return summary;
         }
 	},
 	watch: {
