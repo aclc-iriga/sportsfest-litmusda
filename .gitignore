@@ -19,9 +19,9 @@ app/_test.php
 app/_env.php
 app/config/database.php
 app/crud/uploads/*
-!app/crud/uploads/red.png
-!app/crud/uploads/green.png
-!app/crud/uploads/blue.png
+!app/crud/uploads/abnegation.png
+!app/crud/uploads/erudite.png
+!app/crud/uploads/dauntless.png
 !app/crud/uploads/no-avatar.jpg
 !app/crud/dist
 
