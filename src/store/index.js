@@ -42,7 +42,7 @@ export default createStore({
             if (location.hostname === 'localhost' && location.port === '5176')
                 return `http://localhost${import.meta.env.BASE_URL}${state.app.backendDir}`;
             else
-                return `${location.protocol}//${location.hostname}${import.meta.env.BASE_URL}${state.app.backendDir}`;
+                return `${location.protocol}//${location.port !== '80' ? location.host : location.hostname}${import.meta.env.BASE_URL}${state.app.backendDir}`;
         },
 
         // get window height
